@@ -48,13 +48,17 @@
     <div>
         <label for="validate">validate: </label>
         <input class="inp" id="validate" type="text" readonly="readonly">
+        <button onclick="copyToClipboard('validate')">复制</button>
+        <div id="message1"></div>
     </div>
     <br>
 
     <div>
         <label for="seccode">seccode: </label>
         <input class="inp" id="seccode" type="text" readonly="readonly">
+        <button onclick="copyToClipboard('seccode')">复制</button>
     </div>
+    <div id="message2"></div>
     <br>
 
 
@@ -62,6 +66,14 @@
     <script src="js/gt.js"></script>
 
     <script>
+        window.onload = function() {
+            // 解析 URL 参数
+            var params = new URLSearchParams(window.location.search);
+            // 填充表单字段
+            document.getElementById('gt').value = params.get('gt');
+            document.getElementById('challenge').value = params.get('challenge');
+        }
+
         var handler = function (captchaObj) {
             captchaObj.appendTo('#captcha');
             captchaObj.onReady(function () {
@@ -102,6 +114,18 @@
                 // 更多前端配置参数说明请参见：http://docs.geetest.com/install/client/web-front/
             }, handler);
         });
+        function copyToClipboard(id) {
+            var copyText = document.getElementById(id);
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); /* For mobile devices */
+            document.execCommand("copy");
+            if (id === 'validate') {
+                document.getElementById('message1').innerHTML = '已复制'+copyText.value;
+            } else {
+                document.getElementById('message2').innerHTML = '已复制'+copyText.value;
+            }
+        }
+
     </script>
 </body>
 
